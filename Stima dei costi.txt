@@ -1,0 +1,160 @@
+STIMA DEI COSTI: Use Case Points
+
+
+
+1)
+Unadjusted Use Case Weight (UUCW)
+
+Elenco casi d'uso con complessità stimata associata:
+
+CreaConto		Media
+ModificaOrdine		Complessa
+VisualizzaMenu		Semplice
+EffettuaOrdine		Complessa
+ChiediConto		Semplice
+VisualizzaConto		Semplice
+ModificaImporto		Media
+SaldaConto		Semplice
+Gestione Menu		Semplice
+Gestione Tavoli		Semplice
+Gestione Camerieri	Semplice
+
+Tabella UUCW
+
+Complessità	Peso	Numero UC	Prodotto
+Semplice	5	7		35
+Media		10	2		20
+Complessa	15	2		30
+
+Totale					85
+
+
+
+2)
+Unadjusted Actor Weight (UAW)
+
+Tipi di attori:
+
+Tipo		Esempio						Peso
+Semplice	altro sistema tramite API			1
+Medio		altro sistema tramite protocollo		2
+		oppure persona tramite interfaccia testuale	2
+Complesso	persona tramite interfaccia grafica		3
+
+Elenco attori con tipo stimato associato:
+
+Attore			Tipo	
+UtenteNonAutenticato	3
+Cameriere		3
+ClienteAutenticato	3
+Proprietario		3
+SisGestCucina		1
+SisGestCassa		1
+
+Tabella
+
+Tipo		Peso	Numero A	Prodotto
+Semplice	1	2		2
+Medio		2	0		0
+Complesso	3	4		12
+
+Totale					14
+
+
+
+3)
+Unadjusted Use Case Points (UUCP)
+
+UUCP = UUCW + UAW = 85 + 14 = 99
+
+
+
+4)
+Aggiustamenti per la Complessità Tecnica (requisiti non funzionali)
+
+Fattori				Peso	Valutazione	Impatto
+
+Sistema distribuito		2	3		6
+Obiettivi di performance	2	2		4
+Efficienza end-user		1	4		4
+Elaborazione complessa		1	2		2
+Codice riusabile		1	3		3
+Facile da installare		0.5	3		1.5
+Facile da usare			0.5	4		2
+Portabile			2	1		2
+Facile da modificare		1	3		3
+Uso concorrente			1	3		3
+Sicurezza			1	3		3
+Accesso a terze parti		1	3		3
+Necessita addestramento		1	1		1
+
+Totale							37.5
+
+Nota: gli assessment sono stati assegnati cercando sì di avere un buon software, ma anche di venire incontro al prezzo che il cliente è disposto a spendere per il software.
+Ad esempio sarebbe ovviamente meglio avere un software portabile, ma questo comporterebbe una lievitazione del prezzo maggiore rispetto al far ottenere al cliente una macchina con windows installato piuttosto che altri OS.
+
+TCF = 0.6 + (0.01 x TFactor) = 0.6 + (0.01 x 37.5) = 0.975
+
+
+
+5)
+Aggiustamento per la complessità dell’ambiente (ambiente di lavoro)
+
+Fattore					Peso	Valutazione	Impatto
+Familiare con il processo di sviluppo	1.5	1		1.5
+Esperienza sull'applicazione		0.5	1		0.5
+Esperienza sull'Object-Orientation	1	3		3
+Capacità dell'analista			0.5	3		1.5
+Motivazione				1	4		4
+Requisiti stabili			2	3		6
+Staff part-time				-1	0		0
+Linguaggio di programmazione difficile	-1	0		0
+
+Totale								16.5
+
+EF = 1.4 + (-0.03 x EFactor) = 1.4 + (-0.03 x 16.5) = 0.905
+
+
+
+6)
+Calcolo Finale degli Use Case Points (UCP)
+
+UCP = UUCP x TCF x EF = 99 x 0.975 x 0.905 =~ 87.36
+
+
+
+7)
+Ore di lavoro totali:
+
+UCP x 24 = 2096
+
+Nota: supponendo che un singolo UC venga sviluppato in 20-28 ore, noi scegliamo il valore medio di 24.
+
+
+
+8)
+Numero iterazioni:
+
+- 1 lavoratore = 30 ore a settimana*
+
+- 4 lavoratori = 120 ore a settimana
+
+- ore di lavoro totale / ore a settimana del gruppo di lavoro = 2096 / 120 = 17
+
+Quindi si stima che occorrano 17 settimane = 17 iterazioni per sviluppare questo progetto nella sua interezza.
+
+Nota*: si sta supponendo che uno sviluppatore lavori 30 ore a settimana sul progetto come riportato sulle slide.
+
+
+
+
+
+
+
+
+
+
+
+
+
+

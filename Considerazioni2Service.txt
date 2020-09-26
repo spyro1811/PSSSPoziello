@@ -1,0 +1,73 @@
+Benefici Architettura Monolitica:
+ovviamente le architetture monolitiche vantano anche dei benefici, soprattutto quando si tratta di applicazioni relativamente piccole:
+semplice da sviluppare: gli IDE e in genere gli strumenti di sviluppo sono pensati per sviluppare una singola applicazione;
+facile fare cambiamenti anche radicali: si può cambiare il codice, lo schema del database, eseguire il build e il deploy;
+facile fare test: gli sviluppatori scrivono test end-to-end che lanciano l’app, invocano le API, e testano la UI (senza usare stub o altro) (es. con Selenium);
+facile fare il deploy: lo sviluppatore deve solo copiare il file.war in un server dove è installato un sistema web server (es. Tomcat);
+facile da scalare: istanze multiple dell’applicazione possono essere eseguite in presenza di un load balancer.
+
+Svantaggi Architettura Monolitica:
+tuttavia nel tempo, al crescere delle dimensioni, lo sviluppo, i test, il deploy e lo scaling diventano sempre più difficili:
+il codice diventa sempre più complesso e difficile da comprendere e modificare;
+lo sviluppo si rallenta: il ciclo edit-build-run-test richiede sempre più tempo;
+rilasciare le modifiche in produzione richiede periodi molto lunghi (il Continuous Deployment, ossia il deploy più volte al giorno è irrealizzabile: ci vogliono mesi, non minuti, per fare il deploy delle versioni modificate, e allo stesso modo molto tempo è richiesto per fare il testing dell’intero sistema);
+difficoltà nello scalare l’applicazione (monolitica);
+problemi di affidabilità (tutta l’applicazione è in esecuzione in un singolo processo: un eventuale crash in un modulo fa crashare l’intera applicazione).
+
+Come ci siamo coordinati
+Di sicuro abbiamo fatto lavoro a coppie in fase di documentazione: potremmo estendere anche al codice. Invece l'analisi e la progettazione direi che l'abbiamo fatta di gruppo tutti e 4 su teams.
+
+E poi vabbe abbiamo usato drive per tenere tutto condiviso, magari diciamo tipo che inviavamo un messaggio su whatsapp ogni volta che dovevamo modificare il .vpp o il codice per scongiurare che entrambi lavorassero sullo stesso file (soprattutto per il .vpp visto che Visual Paradigm fa cacare).
+
+
+Difficoltà trovate e superate
+
+
+PROBLEMA 1: scelta dell'architettura
+Sicuramente c'è il problema per cui inizialmente avevamo pensato un'architettura diversa e poi l'abbiamo modificata in corso d'opera. 
+L'unico dubbio da chiarire resta se conviene parlare genericamente di dubbi del tipo "BCE oppure MVC" oppure se menzionare le notifiche e quindi dire "avevamo pensato a soluzioni con gestione degli eventi, anche all'architettura componenti&connettori, ma poi abbiamo ripiegato ecc ecc".
+Nel caso in cui menzioniamo le notifiche, possiamo anche parlare di come abbiamo rianalizzato il problema in funzione del non avere più le notifiche. Ad esempio prima era il proprietario che doveva confermare la richiesta del conto del cliente, mentre poi ci siamo resi conto che sarebbe stata una inutile complicazione macchinosa del software (tra l'altro anche consigliatoci da lei a ricevimento così facciamo anche quelli che seguono i suoi consigli).
+
+
+PROBLEMA 2: database interno o esterno?
+Inizialmente abbiamo pensato il database come entità interna all'applicazione, ma poi abbiamo deciso di spostare il database esternamente per ottenere il vantaggio di una modularità e scalabilità futura: infatti grazie a tale accorgimento un domani potremo prevedere anche di distribuire il database su una macchina diversa da quella in cui risiede il server.
+
+
+PROBLEMA 3: usare un framwork invece che partire da zero
+Nella ricerca di una implementazione già fatta del pattern MVC abbiamo trovato il framework Spring MVC che però utilizza un MVC leggermente diverso etc. etc. è DI TIPO PULL LA NOSTRA
+
+PROBLEMA 4: rendere "effettuaOrdine" efficiente
+Quando abbiamo implementato il caso d'uso EffettuaOrdine abbiamo risolto inizialmente memorizzando l'ordine nel database per ogni singolo prodotto aggiunto o rimosso dall'ordinazione corrente 
+Ma nel momento in cui abbiamo deciso di rendere l'operazione più efficiente, abbiamo trovato due soluzioni:
+- usare un file locale nel client che mantenesse le informazioni dell'ordine (SessionStorage e LocalStorage aggiunti con HTML5);
+- modificare leggermente l'interfaccia utente ed usare il pattern DTO per il trasferimento dati in maniera più efficiente.
+Alla fine abbiamo optato per la seconda.
+
+
+PROBLEMA 5: deployment
+C'è il problema per cui noi abbiamo sempre testato il codice in fase di sviluppo, ovvero direttamente all'interno di Spring (cioè spring usava automaticamente tomcat al suo interno).
+Quando invece abbiamo dovuto fare il deploy (cioè siamo passati in fase di produzione) su server sulla macchina destinazione (che poi vabbe è sempre la nostra), ci siamo resi conto di problemi di configurazione dell'app.
+Anche qui da decidere se dobbiamo dire o meno se abbiamo modificato manualmente tutti i riferimenti ipertestuali nel front-end per poter usare l'app una volta deployata sul server.
+
+
+PROBLEMA 6: come implementare il login
+Anche di come abbiamo risolto il login nell'app è un problema volendo, cioè non sapevamo come fare se non tutto a mano, però pensado che è meglio RIUSARE cose già fatte che rifare sempre ex novo, allora abbiamo cercato un framework che potesse fare al caso nostro e abbiamo trovato Spring Security. Però in tal caso bisogna rivedersi un attimo per bene come funziona. Stanno i video su youtube e ci starebbe anche una sintetica "sbobinatura-like" fatta da me, se vi interessa.
+
+
+PROBLEMA 7: eliminazione dell'ereditarietà
+Problema relativo alla gestione dell'ereditarietà nelle classi di dominio (da internet):
+nel caso di utilizzo di interfacce JPA e Hibernate bisognerebbe preferire la composizione tra classi piuttosto che l'ereditarietà, poiché i database relazionali hanno il concetto di composizione "has a", ma non hanno il concetto di ereditarietà "is a", per cui è più semplice ed immediato mappare entità associate in termini di composizione piuttosto che tramite ereditarietà.
+Vale sia per Personale = Proprietario + Cameriere, sia per Prodotto = Pietanza + Bevanda.
+
+
+PROBLEMA 8: come si sviluppa un front-end?
+Come realizzare il front-end? HTML + Javascript oppure HTML + Thymeleaf?
+Anche se a dire il vero preferirei anche non parlarne proprio perché sul front-ent so poco e niente XD
+
+
+PROBLEMA 9: come si accede alla nostra app?
+Inizialmente avevamo pensato ad un QR code, ma durante lo sviluppo del progetto abbiamo avuto modo di provare alcuni locali che offrivano questa soluzione e ci siamo resi conto che molte persone, soprattutto di mezza età, avevano difficoltà con questa nuova tecnologia e richiedevano un aiuto al cameriere per risolvere.
+Per questo abbiamo deciso di optare per mettere il link direttamente sulle pagine social del locale.
+
+
+Ce ne sono altri?
